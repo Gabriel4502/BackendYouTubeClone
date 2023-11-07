@@ -6,6 +6,7 @@ import { Request, Response } from 'express';
 
 class UserRepository {
 
+
     create(request: Request, response: Response){
 
     const {name, email, password} = request.body;
@@ -39,19 +40,15 @@ class UserRepository {
         connection.query(
             'SELECT * FROM users WHERE email = ?',
             [email],
-            (error: any, results: any, filds: any) =>{
+            (error: any, results: any, fields: any) =>{
                 connection.release();
-                        console.log(results)
+                        
                     if(error){
-                        return response.status(400).send({error:'Email incorreto0'})
+                        return response.status(400).send({error:'Erro na autenticação'})
                     }
 
-                    if(results.length===0){
-                        return response.status(400).json({error: "Usuario não encontrado"})
-                    }
- 
-                if(results[0].email === undefined || results[0].password === undefined){
-                    return response.status(400).send({error: 'Erro na sua autenticação0'})
+                if(results.length===0){
+                    return response.status(400).json({error: "Usuario não encontrado"})
                    
 
                 } else{
@@ -100,7 +97,7 @@ class UserRepository {
 
                     return response.status(201).send({
                         user: {
-                            nome: resultado[0].name,
+                            nome: resultado[0].name as string,
                             email: resultado[0].email,
                             id: resultado[0].user_id,
                         }
@@ -110,6 +107,27 @@ class UserRepository {
         } )
     }
  }
+
+
+ getEmail(request: any, response: any){
+    pool.getConnection((error, conn)=>{
+        conn.query(
+            'SELECT email FROM users WHERE email=?',
+            (error, result)=>{
+                conn.release();
+                if(result){
+                    return result[0].email
+                }else{
+                    return response.status(400).send({
+                        error: error,
+                        response: null
+                    })
+                }
+            }
+        )
+    })
+ }
+
 
 }
 

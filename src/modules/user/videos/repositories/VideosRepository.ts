@@ -7,16 +7,15 @@ import { Request, Response } from 'express';
 class VideoRepository {
 
     create(request: Request, response: Response){
-
-    const {title, description, user_id} = request.body;
+    const {title, description, user_id, path} = request.body;
     pool.getConnection((err: any, connection : any) =>{
         connection.query(
-            'INSERT INTO videos (video_id, user_id, title, description) VALUES (?, ?, ?, ?)',
-            [uuidv4(), user_id, title, description],
+            'INSERT INTO videos (video_id, user_id, title, description, path ) VALUES (?, ?, ?, ?, ?)',
+            [uuidv4(), user_id, title, description, path],
             (error: any, result: any, fields: any) =>{
                 connection.release();
                 if (error){
-                    return response.status(400).json(error)
+                    return response.status(400).json({error: 'Erro ao cadastrar video'})
                 }
                 response.status(200).json({message: 'Video criado com sucesso'});
             }
@@ -36,6 +35,22 @@ class VideoRepository {
                         return response.status(400).json({error: "Erro ao buscar os videos!"})
                     }
                     return response.status(200).json({message: 'Videos retornados com sucesso', videos: results})
+                }
+            )
+        })
+    }
+
+    getAllVideos(request: Request, response: Response){
+        pool.getConnection((err: any, connection: any) =>{
+            connection.query(
+                'SELECT name, title, description, imageUrl, data_Upload, views FROM videos  JOIN users on videos.user_id = users.user_id',
+                (error: any, results: any, fields: any)=>{
+                    connection.release();
+                    if (error){
+                        return response.status
+                    }
+                    return response.status(200).json({message: 'Videos retornados', results})
+
                 }
             )
         })

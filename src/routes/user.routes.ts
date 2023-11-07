@@ -16,7 +16,12 @@ userRoutes.post('/sign-in', (request, response) =>{
 userRoutes.get('/get-user', login, (request, response) =>{
     userRepository.getUser(request, response);
 }
-) 
+)
+
+userRoutes.post('/get-email',(request, response)=>{
+    userRepository.getEmail(request, response);
+})
+
 
 
 

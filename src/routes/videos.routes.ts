@@ -13,6 +13,10 @@ videosRoutes.get('/get-videos', login, (request, response) =>{
     videoRepository.getVideos(request, response);
 })
 
+videosRoutes.get('/get-all-videos', (request, response) =>{
+    videoRepository.getAllVideos(request, response);
+})
+
 videosRoutes.get('/search', login, (request, response) =>{
     videoRepository.searchVideos(request, response);
 })
