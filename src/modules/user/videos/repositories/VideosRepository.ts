@@ -7,11 +7,11 @@ import { Request, Response } from 'express';
 class VideoRepository {
 
     create(request: Request, response: Response){
-    const {title, description, user_id, path} = request.body;
+    const {title, description, user_id, imageUrl} = request.body;
     pool.getConnection((err: any, connection : any) =>{
         connection.query(
-            'INSERT INTO videos (video_id, user_id, title, description, path ) VALUES (?, ?, ?, ?, ?)',
-            [uuidv4(), user_id, title, description, path],
+            'INSERT INTO videos (video_id, user_id, title, description, imageUrl ) VALUES (?, ?, ?, ?, ?)',
+            [uuidv4(), user_id, title, description, imageUrl],
             (error: any, result: any, fields: any) =>{
                 connection.release();
                 if (error){
@@ -57,7 +57,7 @@ class VideoRepository {
     }
 
     searchVideos(request: Request, response: Response){
-        const {search} = request.query;
+        const search = request.query.search;
         pool.getConnection((err: any, connection : any) =>{
             connection.query(
                 'SELECT * FROM videos WHERE title LIKE?',

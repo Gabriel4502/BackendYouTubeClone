@@ -17,7 +17,7 @@ videosRoutes.get('/get-all-videos', (request, response) =>{
     videoRepository.getAllVideos(request, response);
 })
 
-videosRoutes.get('/search', login, (request, response) =>{
+videosRoutes.get('/search', (request, response) =>{
     videoRepository.searchVideos(request, response);
 })
 
